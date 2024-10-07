@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.hall-of-fame-list {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.hall-of-fame-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.hall-of-fame-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.back-btn {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 150px;
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #0056b3;
+}

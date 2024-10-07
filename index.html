@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <title>Pelin tiedot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+
+<header>
+    
+    <h3 style="text-align: center;">Pelien hall of fame</h3>
+    <div><button class="login" type="button">LOG IN</button></div>
+   
+</header>
+
+
+<body>
+    <h1>Pelitiedot</h1>
+    <div class="game-grid" id="game-info"></div>
+
+    <script>
+        // Lataa ulkoinen JSON-tiedosto
+        fetch('games.json')
+            .then(response => response.json())
+            .then(data => {
+                const games = data.games;
+                let output = '';
+
+                // Luodaan HTML-struktuuri pelitiedoille
+                games.forEach(game => {
+                    output += `
+                        <div class="game-card">
+                            <h2>${game.game_name.fi} (${game.launched_year})</h2>
+                            <p><strong>Kuvaus:</strong> ${game.description.fi}</p>
+                            <p><strong>Valmistaja:</strong> ${game.maker}</p>
+                            <p><strong>Julkaisija:</strong> ${game.publisher}</p>
+                            <p><strong>Alkuperäiset alustat:</strong> ${game.original_platforms.join(', ')}</p>
+                            <!-- Painike, joka vie käyttäjän Hall of Fame -sivulle -->
+                            <a href="halloffame.html?id=${game.ID}" class="hall-of-fame-btn">Näytä Hall of Fame</a>
+                        </div>
+                    `;
+                });
+
+                // Lisätään pelitiedot ruudukkoon
+                document.getElementById('game-info').innerHTML = output;
+            })
+            .catch(error => console.log('Virhe ladattaessa JSON-tiedostoa:', error));
+    </script>
+
+
+
+
+</body>
+
+
+<footer>
+    <div><button type="button">Ota yhteyttä</button></div>
+</footer>
+
+</html>

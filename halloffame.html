@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <!-- Asetetaan UTF-8-merkistö, jotta kaikki merkit, kuten ä ja ö, toimivat oikein -->
+    <meta charset="UTF-8">
+    
+    <!-- Responsiivisuuden määrittely, jolloin näkymä skaalautuu mobiililaitteille sopivasti -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Sivun otsikko, joka näkyy selaimen välilehdessä -->
+    <title>Hall of Fame</title>
+
+    <!-- Liitetään ulkoinen CSS-tiedosto, joka sisältää sivun tyylit -->
+    <link rel="stylesheet" type="text/css" href="styles2.css" />
+</head>
+<body>
+    <!-- Sivun pääotsikko -->
+    <h1>Hall of Fame</h1>
+    
+    <!-- Kontti, johon Hall of Fame -lista sijoitetaan JavaScriptin avulla -->
+    <div class="hall-of-fame-list" id="hall-of-fame"></div>
+
+    <!-- Linkki, joka vie käyttäjän takaisin pääsivulle peleihin -->
+    <a href="index.html" class="back-btn">Takaisin peleihin</a>
+
+    <script>
+        // Otetaan URL-osoitteen parametreista pelin ID, joka on passattu sivulle (esim. ?id=1)
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameId = urlParams.get('id');  // Haetaan 'id'-parametri
+
+        // Ladataan JSON-tiedosto, joka sisältää pelien tiedot
+        fetch('games.json')
+            .then(response => response.json())  // Muutetaan vastaus JSON-muotoon
+            .then(data => {
+                const games = data.games;  // Tallennetaan pelitiedot muuttujaan
+                const game = games.find(g => g.ID == gameId);  // Haetaan peli, jonka ID vastaa URL-parametrin arvoa
+
+                // Tarkistetaan, onko pelillä Hall of Fame -listaa
+                if (game && game.hall_of_fame && game.hall_of_fame.length > 0) {
+                    // Lajitellaan Hall of Fame -lista pisteiden perusteella
+                    const sortedHallOfFame = game.hall_of_fame.sort((a, b) => b.score - a.score);
+
+                    // Kolme parasta tulosta
+                    const topThree = sortedHallOfFame.slice(0, 3);
+                    
+                    // Loput tulokset (jos niitä on)
+                    const remainingResults = sortedHallOfFame.slice(3);
+
+                    // Luodaan HTML Hall of Fame -listalle
+                    let hallOfFameHtml = `<h2>${game.game_name.fi} (${game.launched_year}) - Hall of Fame</h2>`;
+
+                    // Näytetään kolme parasta tulosta lihavoituna
+                    hallOfFameHtml += `<div><h3>Kolme parasta tulosta:</h3><ul>`;
+                    topThree.forEach(entry => {
+                        hallOfFameHtml += `<li><strong>${entry.username} - Score: ${entry.score} (${new Date(entry.date_time).toLocaleDateString()})</strong></li>`;
+                    });
+                    hallOfFameHtml += `</ul></div>`;
+
+                    // Näytetään loput tulokset, jos niitä on
+                    if (remainingResults.length > 0) {
+                        hallOfFameHtml += `<div><h3>Muut tulokset:</h3><ul>`;
+                        remainingResults.forEach(entry => {
+                            hallOfFameHtml += `<li>${entry.username} - Score: ${entry.score} (${new Date(entry.date_time).toLocaleDateString()})</li>`;
+                        });
+                        hallOfFameHtml += `</ul></div>`;
+                    }
+
+                    document.getElementById('hall-of-fame').innerHTML = hallOfFameHtml;  // Asetetaan Hall of Fame HTML-elementtiin
+                } else {
+                    // Jos pelillä ei ole Hall of Fame -listaa, näytetään ilmoitus
+                    document.getElementById('hall-of-fame').innerHTML = '<p>Ei Hall of Fame -tietoja saatavilla tälle pelille.</p>';
+                }
+            })
+            // Virheenkäsittely: jos JSON-tiedoston lataamisessa on ongelmia, tulostetaan virhe konsoliin
+            .catch(error => console.log('Virhe ladattaessa JSON-tiedostoa:', error));
+    </script>
+</body>
+</html>
