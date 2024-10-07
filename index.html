@@ -1,64 +1,190 @@
 <!DOCTYPE html>
 <html lang="fi">
 <head>
+    <!-- Asetetaan merkistö UTF-8, jotta kaikki erikoismerkit, kuten ä ja ö, toimivat oikein -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="styles.css" />
-    <title>Pelin tiedot</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-</head>
-
-<header>
     
-    <h3 style="text-align: center;">Pelien hall of fame</h3>
-    <div><button class="login" type="button">LOG IN</button></div>
-   
-</header>
+    <!-- Asetetaan näkymälaajuus laitteelle sopivaksi ja estetään sivun zoomaaminen -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Liitetään ulkoinen CSS-tyylitiedosto, joka sisältää tyylimääritykset -->
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    
+    <!-- Sivun otsikko, joka näkyy selaimen välilehdessä -->
+    <title>Pelin tiedot</title>
 
+    <style>
+        /* Yleinen tyyli bannerille */
+        header {
+            background-color: #304bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
 
+        /* Yleinen tyyli peliruudulle */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Pelien ruudukko ja kortit */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 20px;
+            flex: 1;
+        }
+
+        .game-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            min-height: 350px; /* Varmistaa yhtenäisen korkeuden */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Footer-tyylit */
+        footer {
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        footer button {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        footer button:hover {
+            background-color: #0056b3;
+        }
+
+        footer button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
 <body>
+    <!-- Banneri sivun yläosaan -->
+    <header>
+        <h3 style="text-align: center;">Pelien hall of fame</h3>
+        <div><button class="login" type="button">LOG IN</button></div>
+    </header>
+
+    <!-- Sivun pääotsikko -->
     <h1>Pelitiedot</h1>
+
+    <!-- Kontti, johon pelitiedot lisätään JavaScriptin avulla -->
     <div class="game-grid" id="game-info"></div>
 
+    <!-- Footer-osio, joka sisältää sivutuspainikkeet -->
+    <footer>
+        <button id="prev-btn" disabled>Edellinen</button>
+        <button id="next-btn">Seuraava</button>
+        <div><button type="button">Ota yhteyttä</button></div>
+    </footer>
+
     <script>
-        // Lataa ulkoinen JSON-tiedosto
+        let currentPage = 1;    // Nykyinen sivu
+        const gamesPerPage = 20; // Näytettävien pelien määrä per sivu
+        let games = [];         // Talletetaan pelit JSON-tiedostosta
+
+        // Ladataan JSON-tiedosto
         fetch('games.json')
             .then(response => response.json())
             .then(data => {
-                const games = data.games;
-                let output = '';
-
-                // Luodaan HTML-struktuuri pelitiedoille
-                games.forEach(game => {
-                    output += `
-                        <div class="game-card">
-                            <h2>${game.game_name.fi} (${game.launched_year})</h2>
-                            <p><strong>Kuvaus:</strong> ${game.description.fi}</p>
-                            <p><strong>Valmistaja:</strong> ${game.maker}</p>
-                            <p><strong>Julkaisija:</strong> ${game.publisher}</p>
-                            <p><strong>Alkuperäiset alustat:</strong> ${game.original_platforms.join(', ')}</p>
-                            <!-- Painike, joka vie käyttäjän Hall of Fame -sivulle -->
-                            <a href="halloffame.html?id=${game.ID}" class="hall-of-fame-btn">Näytä Hall of Fame</a>
-                        </div>
-                    `;
-                });
-
-                // Lisätään pelitiedot ruudukkoon
-                document.getElementById('game-info').innerHTML = output;
+                games = data.games; // Talletetaan pelit
+                displayGames();     // Näytetään pelit ensimmäisellä sivulla
             })
             .catch(error => console.log('Virhe ladattaessa JSON-tiedostoa:', error));
+
+        // Funktio pelien näyttämiseksi nykyisellä sivulla
+        function displayGames() {
+            const gameInfo = document.getElementById('game-info');
+            gameInfo.innerHTML = ''; // Tyhjennetään vanhat tiedot
+            const start = (currentPage - 1) * gamesPerPage;
+            const end = start + gamesPerPage;
+            const currentGames = games.slice(start, end); // Hae pelit nykyiselle sivulle
+
+            // Käydään läpi valitut pelit ja luodaan HTML
+            currentGames.forEach(game => {
+                gameInfo.innerHTML += `
+                    <div class="game-card">
+                        <h2>${game.game_name.fi} (${game.launched_year})</h2>
+                        <p><strong>Kuvaus:</strong> ${game.description.fi}</p>
+                        <p><strong>Valmistaja:</strong> ${game.maker}</p>
+                        <p><strong>Julkaisija:</strong> ${game.publisher}</p>
+                        <p><strong>Alkuperäiset alustat:</strong> ${game.original_platforms.join(', ')}</p>
+                        <a href="halloffame.html?id=${game.ID}" class="hall-of-fame-btn">Näytä Hall of Fame</a>
+                    </div>
+                `;
+            });
+
+            // Päivitetään sivutuspainikkeet
+            updatePaginationButtons();
+        }
+
+        // Funktio päivittämään sivutuspainikkeet
+        function updatePaginationButtons() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            // Edellinen-painike on aktiivinen vain, jos ei olla ensimmäisellä sivulla
+            if (currentPage === 1) {
+                prevBtn.disabled = true;
+            } else {
+                prevBtn.disabled = false;
+            }
+
+            // Seuraava-painike on aktiivinen vain, jos ei olla viimeisellä sivulla
+            if (currentPage * gamesPerPage >= games.length) {
+                nextBtn.disabled = true;
+            } else {
+                nextBtn.disabled = false;
+            }
+        }
+
+        // Edellinen-painikkeen tapahtumankuuntelija
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                displayGames();
+            }
+        });
+
+        // Seuraava-painikkeen tapahtumankuuntelija
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (currentPage * gamesPerPage < games.length) {
+                currentPage++;
+                displayGames();
+            }
+        });
     </script>
-
-
-
-
 </body>
-
-
-<footer>
-    <div><button type="button">Ota yhteyttä</button></div>
-</footer>
-
 </html>
