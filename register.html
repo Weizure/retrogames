@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="styles.css" />
-  <title>Login</title>
+  <title>Register</title>
   <header></header>
-  <h1>Log in</h1>
+  <h1>Register</h1>
   <style>
     /* Yleinen tyyli bannerille */
     header {
@@ -32,7 +32,6 @@
         text-align: center;
         margin-top: 20px;
     }
-
 
     /* Footer-tyylit */
     footer {
@@ -62,14 +61,27 @@
         background-color: #ccc;
         cursor: not-allowed;
     }
-    .login-container label {
+    .register-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      height: 350px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .register-container label {
       display: block;
       margin-bottom: 8px;
       font-size: 14px;
       color: #333;
       text-align: left;
     }
-    .login-container input {
+    .register-container input {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
@@ -77,7 +89,7 @@
       border-radius: 5px;
       font-size: 14px;
     }
-    .login-container button {
+    .register-container button {
       width: 108.5%;
       padding: 10px;
       background-color: #007bff;
@@ -87,7 +99,7 @@
       cursor: pointer;
       font-size: 16px;
     }
-    .login-container button:hover {
+    .register-container button:hover {
       background-color: #0056b3;
     }    
     div{
@@ -101,20 +113,26 @@
     }
 </style>
 </head>
-<body><div>
-
-  <div class="login-container">
-    <form action="#" method="post">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" required>
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required>
-
-      <button type="submit">Login</button>
-    </form>
-  </div>
-
-
-</body>
+<body>
+    <br></br>
+    <br></br>
+<div>
+    <div class="register-container">
+      <form action="#" method="post">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+  
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+  
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+  
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+  
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </body>
 </html>
