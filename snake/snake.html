@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaksinpeli Mato</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="start-screen">
+        <h1>Kaksinpeli Mato</h1>
+        <button id="start-button">Aloita</button>
+    </div>
+
+    <canvas id="game-canvas" width="600" height="600"></canvas>
+
+    <div id="end-screen" style="display: none;">
+        <h1>Peli päättyi!</h1>
+        <p>Pisteesi: <span id="score-display"></span></p>
+        <p>Haluatko tallentaa tuloksen?</p>
+        <button id="save-yes">Kyllä</button>
+        <button id="save-no">Ei</button>
+
+        <div id="save-score" style="display: none;">
+            <input type="text" id="player-name" placeholder="Syötä nimesi">
+            <button id="submit-score">Tallenna</button>
+        </div>
+
+        <button id="play-again">Pelaa uudelleen</button>
+    </div>
+
+    <div id="hall-of-fame">
+        <h2>Hall of Fame</h2>
+        <ul id="score-list">
+            <!-- Tulokset päivittyvät tähän -->
+        </ul>
+    </div>
+
+    <script src="matopeli.js"></script>
+</body>
+</html>
