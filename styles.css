@@ -6,6 +6,8 @@ body {
 
 }
 
+
+
 h1 {
     text-align: center;
     margin: 10;
@@ -74,6 +76,7 @@ h3 {
     }
 }
 
+
 header { 
     background-image: url('retrogame.png'); 
     background-size: contain;
@@ -113,6 +116,18 @@ button{
 }
 
 .login{
+    padding: 20px ;
+    background-color: #4860FC;
+    border-color: #ffffff;
+    Border-radius: 14%;
+    font-family: "kanit", sans-serif;
+    text-align: center;
+    font-size: 20px;
+    color: #ffffff;
+    position: absolute;
+    right: 20px;
+}
+.cancel{
     padding: 20px ;
     background-color: #4860FC;
     border-color: #ffffff;

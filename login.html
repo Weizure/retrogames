@@ -5,18 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="styles.css" />
   <title>Login</title>
-  <header></header>
-  <h1>Log in</h1>
   <style>
     /* Yleinen tyyli bannerille */
     header {
-        background-color: #304bff;
-        color: white;
-        padding: 20px;
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-    }
+            background-color: #304bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
 
     /* Yleinen tyyli peliruudulle */
     body {
@@ -101,7 +99,12 @@
     }
 </style>
 </head>
-<body><div>
+<body>
+    <header>
+        <div><button onclick="window.location.href='index.html'" class="cancel" type="button">Cancel</button></div>
+      </header>
+      <h1>Login</h1>
+    <div>
 
   <div class="login-container">
     <form action="#" method="post">
